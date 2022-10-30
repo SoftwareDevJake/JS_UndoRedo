@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let array = [];
+        let pastArray = [];
+        let undoArray = [];
+        let index = 0;
+        let undoIndex = 0;
+        let undoCount = 0;
+
+        function mine2()
+        {
+            let command = prompt("Type a command here.");
+
+            if(command == "add")
+            {
+                if(undoCount > 0)
+                {
+                    functionAfterUnRedo();
+                }
+                pastArray.push(array.flat([]));
+                array.push(index);
+                index++;
+            }
+            else if(command == "delete")
+            {
+                if(undoCount > 0)
+                {
+                    functionAfterUnRedo();
+                }
+                pastArray.push(array.flat([]));
+                array.pop();
+                index--;
+            }
+            else if(command == "undo")
+            {
+                if(undoCount > pastArray.length - 1)
+                {
+                    console.log("no more to undo");
+                }
+                else
+                {
+                    undoArray.push(array.flat([]));
+                    undoCount++;
+                    undoIndex = pastArray.length - undoCount;
+                    array = pastArray[undoIndex];
+                }
+            }
+            else if(command == "redo")
+            {
+                if(undoCount == 0)
+                {
+                    console.log('no more to redo');
+                }
+                else
+                {
+                    array = undoArray[undoCount - 1];
+                    undoCount--;
+                    undoArray.pop();
+                }
+                
+            }
+            console.log("command : " + command);
+            console.log(array);
+            console.log(pastArray);
+            console.log(undoArray);
+        }
+
+        function functionAfterUnRedo()
+        {
+            let length = pastArray.length;
+            for(let i = undoIndex; i < length; i++)
+            {
+                pastArray.pop();
+            }
+            
+            undoArray = [];
+
+            index = undoIndex;
+            undoCount = 0;
+        }
+    </script>
+    <Button onClick="mine2()">Click here and put command in it.</Button>
+</body>
+</html>
